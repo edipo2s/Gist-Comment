@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GistComment</string>
+
+    <string name="no_camera">No camera found.</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+
+    <string name="tip">Please point the camera for a QRCode with a gist address.</string>
 </resources>
