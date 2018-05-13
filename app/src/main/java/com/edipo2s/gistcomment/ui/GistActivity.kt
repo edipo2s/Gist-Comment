@@ -62,7 +62,26 @@ internal class GistActivity : BaseActivity(R.layout.activity_gist) {
                     gistCommentsAdapter.submitList(it)
                 }
             })
-            it.requestGist(gistId)
+            it.gistAuthTokenLiveData.observe(this, Observer {
+                onResourceReceived(it) {
+                    val hasValidToken = it.isNotEmpty()
+                    edit_comment.isEnabled = hasValidToken
+                    edit_comment.hint = getString(R.string.comment_tip.takeIf { hasValidToken }
+                            ?: R.string.signin_required)
+                    image_sign_send.setImageResource(R.drawable.svg_send.takeIf { hasValidToken }
+                            ?: R.drawable.svg_github)
+                }
+            })
+            if (gistId != null) {
+                it.requestGist(gistId)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.data?.let {
+            viewModel?.getGitAuthCode(it)
         }
     }
 
@@ -78,6 +97,9 @@ internal class GistActivity : BaseActivity(R.layout.activity_gist) {
         with(list_comments) {
             adapter = gistCommentsAdapter
             setHasFixedSize(true)
+        }
+        image_sign_send.setOnClickListener {
+            viewModel?.sendCommentOrStartSign(edit_comment.text.toString())
         }
     }
 

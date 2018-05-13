@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -56,8 +57,7 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
         camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             @SuppressLint("MissingPermission")
             override fun surfaceCreated(holder: SurfaceHolder) {
-//                checkForCameraPermission()
-                showGist("10003130")
+                checkForCameraPermission()
             }
 
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -113,12 +113,14 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
         }
     }
 
-    private fun showGist(gistId: String) {
+    private fun showGist(gistUrl: String) {
+        val gistId = Uri.parse(gistUrl).lastPathSegment
         startActivity(Intent(this@MainActivity, GistActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(Intent.EXTRA_TEXT, gistId)
         })
+        finish()
     }
 
     companion object {

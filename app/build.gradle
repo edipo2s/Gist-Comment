@@ -12,6 +12,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GITHUB_CLIENT_ID", '"' + github_oauth_app_client_id + '"')
+        buildConfigField("String", "GITHUB_CLIENT_SECRET", '"' + github_oauth_app_client_secret + '"')
     }
     buildTypes {
         release {

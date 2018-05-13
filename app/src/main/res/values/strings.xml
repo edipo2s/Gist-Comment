@@ -1,6 +1,8 @@
 <resources>
 
-    <string name="app_name">GistComment</string>
+    <string name="app_name" translatable="false">Gist Comment</string>
+    <string name="gist_auth_scheme" translatable="false">gistcomment</string>
+    <string name="gist_auth_host" translatable="false">login.success</string>
 
     <string name="no_camera">No camera found.</string>
     <string name="request_permission">This sample needs camera permission.</string>
@@ -8,6 +10,7 @@
     <string name="gist_files">Files:</string>
     <string name="gist_comments">Comments:</string>
     <string name="tip">Please point the camera for a QRCode with a gist address.</string>
-    <string name="signin_required">You must sign on github before comment.</string>
+    <string name="comment_tip">Your comment.</string>
+    <string name="signin_required">You must sign on github before comment. -></string>
 
 </resources>

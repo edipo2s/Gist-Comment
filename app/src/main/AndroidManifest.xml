@@ -26,7 +26,21 @@
 
         <activity
             android:name=".ui.GistActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustPan">
+            <!--Deeplink -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/gist_auth_host"
+                    android:scheme="@string/gist_auth_scheme" />
+
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
