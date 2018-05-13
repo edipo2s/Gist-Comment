@@ -2,6 +2,8 @@ package com.edipo2s.gistcomment.di
 
 import com.edipo2s.gistcomment.App
 import com.edipo2s.gistcomment.di.modules.AppModule
+import com.edipo2s.gistcomment.di.modules.NetworkModule
+import com.edipo2s.gistcomment.di.modules.ViewModelFactoryInjectionModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -11,7 +13,9 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidSupportInjectionModule::class,
     AppModule::class,
-    ViewsModule::class])
+    NetworkModule::class,
+    ViewsModule::class,
+    ViewModelFactoryInjectionModule::class])
 internal interface AppComponent : AndroidInjector<App> {
 
     @Component.Builder

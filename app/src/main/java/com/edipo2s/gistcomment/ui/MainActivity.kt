@@ -3,6 +3,7 @@ package com.edipo2s.gistcomment.ui
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -12,10 +13,13 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
+import androidx.core.widget.toast
+import com.edipo2s.gistcomment.R
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import javax.inject.Inject
 
@@ -31,7 +35,7 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         configView()
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Toast.makeText(this, R.string.no_camera, Toast.LENGTH_LONG).show()
+            toast(R.string.no_camera, duration = Toast.LENGTH_LONG)
         }
     }
 
@@ -41,10 +45,8 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() > 0) {
                     val qrCodeText = barcodes.valueAt(0).displayValue
-                    runOnUiThread {
-                        Toast.makeText(this@MainActivity, qrCodeText, Toast.LENGTH_SHORT).show()
-                    }
                     cameraSource.stop()
+                    showGist(qrCodeText)
                 }
             }
 
@@ -54,7 +56,8 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
         camera_preview.holder.addCallback(object : SurfaceHolder.Callback {
             @SuppressLint("MissingPermission")
             override fun surfaceCreated(holder: SurfaceHolder) {
-                checkForCameraPermission()
+//                checkForCameraPermission()
+                showGist("10003130")
             }
 
             override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
@@ -108,6 +111,14 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
                 Log.e("CAMERA SOURCE", ie.message)
             }
         }
+    }
+
+    private fun showGist(gistId: String) {
+        startActivity(Intent(this@MainActivity, GistActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra(Intent.EXTRA_TEXT, gistId)
+        })
     }
 
     companion object {

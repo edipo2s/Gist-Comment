@@ -1,8 +1,9 @@
 package com.edipo2s.gistcomment.di.modules
 
 import android.content.Context
-import com.edipo2s.gistcomment.model.CredentialsInterceptor
 import com.edipo2s.gistcomment.model.remote.IGistRemoteSource
+import com.edipo2s.gistcomment.network.CredentialsInterceptor
+import com.edipo2s.gistcomment.network.LiveDataCallAdapterFactory
 import com.github.simonpercic.oklog3.OkLogInterceptor
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
@@ -45,11 +46,19 @@ internal class NetworkModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
+    fun providesMoshiConverterFactory(moshi: Moshi): MoshiConverterFactory = MoshiConverterFactory.create(moshi)
+            .withNullSerialization()
+
+    @Singleton
+    @Provides
+    fun providesRetrofit(okHttpClient: OkHttpClient, moshi: Moshi, moshiConverterFactory: MoshiConverterFactory,
+                         liveDataCallAdapterFactory: LiveDataCallAdapterFactory): Retrofit {
         return Retrofit.Builder()
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .baseUrl("https://api.github.com")
                 .client(okHttpClient)
+                .addCallAdapterFactory(liveDataCallAdapterFactory)
+                .addConverterFactory(moshiConverterFactory)
                 .build()
     }
 
