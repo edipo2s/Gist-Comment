@@ -16,4 +16,7 @@ internal interface IGistRemoteSource {
     @GET("gists/{$PATH_GIST_ID}")
     fun getGist(@Path(PATH_GIST_ID) id: String): LiveData<ApiResponse<GistRsp>>
 
+    @GET("gists/{$PATH_GIST_ID}/comments")
+    fun getGistComments(@Path(PATH_GIST_ID) id: String): LiveData<ApiResponse<List<GistCommentRsp>>>
+
 }

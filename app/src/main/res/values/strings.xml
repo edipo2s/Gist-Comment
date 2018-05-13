@@ -6,6 +6,7 @@
     <string name="request_permission">This sample needs camera permission.</string>
 
     <string name="gist_files">Files:</string>
+    <string name="gist_comments">Comments:</string>
     <string name="tip">Please point the camera for a QRCode with a gist address.</string>
     <string name="signin_required">You must sign on github before comment.</string>
 

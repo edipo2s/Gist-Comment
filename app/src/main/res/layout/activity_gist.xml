@@ -43,20 +43,20 @@
         android:id="@+id/text_files"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/gist_files"
         android:layout_marginStart="16dp"
-        app:layout_constraintTop_toTopOf="@id/spinner_files"
+        android:text="@string/gist_files"
         app:layout_constraintBottom_toBottomOf="@id/spinner_files"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/spinner_files" />
 
     <Spinner
         android:id="@+id/spinner_files"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:spinnerMode="dropdown"
+        android:layout_marginStart="16dp"
         android:inputType="none"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text_files"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -65,7 +65,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spinner_files">
@@ -78,5 +78,35 @@
             tools:text="@tools:sample/lorem/random" />
 
     </ScrollView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <TextView
+        android:id="@+id/text_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/gist_comments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_comments"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:scrollbarFadeDuration="0"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_comments"
+        tools:listitem="@layout/item_comment" />
 
 </android.support.constraint.ConstraintLayout>
