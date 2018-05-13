@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.edipo2s.gistcomment.R
-import com.edipo2s.gistcomment.inflate
-import com.edipo2s.gistcomment.loadFromUrl
+import com.edipo2s.gistcomment.*
 import com.edipo2s.gistcomment.model.entity.Gist
 import com.edipo2s.gistcomment.model.entity.GistComment
 import kotlinx.android.synthetic.main.activity_gist.*
@@ -60,22 +58,30 @@ internal class GistActivity : BaseActivity(R.layout.activity_gist) {
             it.gistCommentsLiveData.observe(this, Observer {
                 onResourceReceived(it) {
                     gistCommentsAdapter.submitList(it)
+                    list_comments.smoothScrollToPosition(it.size - 1)
                 }
             })
             it.gistAuthTokenLiveData.observe(this, Observer {
                 onResourceReceived(it) {
-                    val hasValidToken = it.isNotEmpty()
-                    edit_comment.isEnabled = hasValidToken
-                    edit_comment.hint = getString(R.string.comment_tip.takeIf { hasValidToken }
-                            ?: R.string.signin_required)
-                    image_sign_send.setImageResource(R.drawable.svg_send.takeIf { hasValidToken }
-                            ?: R.drawable.svg_github)
+                    onReceiveOAuthToken(it.isNotEmpty())
+                }
+            })
+            it.newGistCommentLiveData.observe(this, Observer {
+                onResourceReceived(it) {
+                    edit_comment.setText("")
+                    viewModel?.updateComments()
+                    hideKeyboard()
                 }
             })
             if (gistId != null) {
                 it.requestGist(gistId)
             }
         }
+    }
+
+    override fun showLoading(loading: Boolean) {
+        super.showLoading(loading)
+        image_sign_send.isEnabled = !loading
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -100,6 +106,18 @@ internal class GistActivity : BaseActivity(R.layout.activity_gist) {
         }
         image_sign_send.setOnClickListener {
             viewModel?.sendCommentOrStartSign(edit_comment.text.toString())
+        }
+    }
+
+    private fun onReceiveOAuthToken(isValidToken: Boolean) {
+        edit_comment.isEnabled = isValidToken
+        edit_comment.hint = getString(R.string.comment_tip.takeIf { isValidToken }
+                ?: R.string.signin_required)
+        image_sign_send.setImageResource(R.drawable.svg_send.takeIf { isValidToken }
+                ?: R.drawable.svg_github)
+        if (isValidToken) {
+            edit_comment.requestFocus()
+            showKeyboard()
         }
     }
 

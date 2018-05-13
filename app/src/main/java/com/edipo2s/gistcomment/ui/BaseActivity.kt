@@ -65,7 +65,7 @@ internal abstract class BaseActivity(@LayoutRes private val layoutRes: Int) :
         }
     }
 
-    private fun showLoading(loading: Boolean) {
+    protected open fun showLoading(loading: Boolean) {
         findViewById<ProgressBar>(R.id.text_title).isVisible = !loading
         findViewById<ProgressBar>(R.id.progress_loading).isVisible = loading
     }

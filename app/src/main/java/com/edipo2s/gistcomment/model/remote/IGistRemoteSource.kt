@@ -1,9 +1,9 @@
 package com.edipo2s.gistcomment.model.remote
 
 import android.arch.lifecycle.LiveData
+import com.edipo2s.gistcomment.Constants
 import com.edipo2s.gistcomment.network.resource.ApiResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 internal interface IGistRemoteSource {
 
@@ -18,5 +18,10 @@ internal interface IGistRemoteSource {
 
     @GET("gists/{$PATH_GIST_ID}/comments")
     fun getGistComments(@Path(PATH_GIST_ID) id: String): LiveData<ApiResponse<List<GistCommentRsp>>>
+
+    @Headers(Constants.REQUEST_AUTHORIZATION)
+    @POST("gists/{$PATH_GIST_ID}/comments")
+    fun createGistComment(@Path(PATH_GIST_ID) id: String,
+                          @Body body: GistCommentRqt): LiveData<ApiResponse<GistCommentRsp>>
 
 }

@@ -2,10 +2,14 @@ package com.edipo2s.gistcomment.model
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.edipo2s.gistcomment.BuildConfig
+import com.edipo2s.gistcomment.Constants
 import com.edipo2s.gistcomment.model.entity.Gist
 import com.edipo2s.gistcomment.model.entity.GistComment
 import com.edipo2s.gistcomment.model.entity.GistFile
+import com.edipo2s.gistcomment.model.remote.GistCommentRqt
 import com.edipo2s.gistcomment.model.remote.GistCommentRsp
 import com.edipo2s.gistcomment.model.remote.GistRsp
 import com.edipo2s.gistcomment.model.remote.IGistRemoteSource
@@ -21,7 +25,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 internal class GistRepository @Inject constructor(private val gistRemoteSource: IGistRemoteSource,
-                                                  private val okHttpClient: OkHttpClient) {
+                                                  private val okHttpClient: OkHttpClient,
+                                                  private val sharedPrefs: SharedPreferences) {
 
     fun getGist(id: String): LiveData<Resource<Gist>> {
         return object : SimpleNetworkBoundResource<Gist, GistRsp>() {
@@ -54,6 +59,20 @@ internal class GistRepository @Inject constructor(private val gistRemoteSource: 
         }.asLiveData()
     }
 
+    fun createGistComments(id: String, comment: String): LiveData<Resource<GistComment>> {
+        return object : SimpleNetworkBoundResource<GistComment, GistCommentRsp>() {
+            override fun parseCallResult(item: GistCommentRsp): GistComment {
+                return GistComment(item.id, item.user.login, item.user.avatar_url,
+                        item.body, LocalDateTime.parse(item.created_at, DateTimeFormatter.ISO_DATE_TIME))
+            }
+
+            override fun createCall(): LiveData<ApiResponse<GistCommentRsp>> {
+                return gistRemoteSource.createGistComment(id, GistCommentRqt(comment))
+            }
+
+        }.asLiveData()
+    }
+
     fun getGithubAuthToken(authCode: String): LiveData<Resource<String>> {
         val authTokenLiveData = MutableLiveData<Resource<String>>()
         authTokenLiveData.value = Resource.loading()
@@ -63,27 +82,29 @@ internal class GistRepository @Inject constructor(private val gistRemoteSource: 
                     .header("Accept", "application/json")
                     .url(authTokenUrl)
                     .build()
-            okHttpClient.newCall(request)
-                    .enqueue(object : Callback {
-                        override fun onResponse(call: Call, response: Response) {
-                            if (response.isSuccessful) {
-                                try {
-                                    val jsonObject = JSONObject(response.body()?.string())
-                                    val authToken = jsonObject.getString("access_token")
-                                    authTokenLiveData.postValue(Resource.success(authToken))
-                                } catch (e: JSONException) {
-                                    authTokenLiveData.postValue(Resource.error(0, e.message
-                                            ?: "", ""))
-                                }
-                            } else {
-                                authTokenLiveData.postValue(Resource.error(0, response.message(), ""))
+            okHttpClient.newCall(request).enqueue(object : Callback {
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            val jsonObject = JSONObject(response.body()?.string())
+                            val oauthToken = jsonObject.getString("access_token")
+                            sharedPrefs.edit {
+                                putString(Constants.PREF_OAUTH_KEY, oauthToken)
                             }
+                            authTokenLiveData.postValue(Resource.success(oauthToken))
+                        } catch (e: JSONException) {
+                            authTokenLiveData.postValue(Resource.error(0, e.message
+                                    ?: "", ""))
                         }
+                    } else {
+                        authTokenLiveData.postValue(Resource.error(0, response.message(), ""))
+                    }
+                }
 
-                        override fun onFailure(call: Call, e: IOException) {
-                            authTokenLiveData.postValue(Resource.error(0, e.message ?: "", ""))
-                        }
-                    })
+                override fun onFailure(call: Call, e: IOException) {
+                    authTokenLiveData.postValue(Resource.error(0, e.message ?: "", ""))
+                }
+            })
         } else {
             authTokenLiveData.value = Resource.error(0, "Github auth token Url parser error", "")
         }

@@ -14,9 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity
-            android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +25,7 @@
         <activity
             android:name=".ui.GistActivity"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
             <!--Deeplink -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
