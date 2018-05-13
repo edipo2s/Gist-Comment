@@ -23,22 +23,40 @@ android {
 
 ext {
     dagger_version = "2.15"
+    moshiVersion = "1.5.0"
+    okIOVersion = "1.13.0"
+    okHttpVersion = "3.9.1"
+    retrofitVersion = "2.3.0"
+    supportLibraryVersion = "27.1.1"
 }
 
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:27.1.1"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:customtabs:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:1.1.0"
+
     implementation "androidx.core:core-ktx:0.3"
+    implementation "com.google.firebase:firebase-ml-vision:15.0.0"
 
     api "com.google.dagger:dagger-android:$dagger_version"
     api "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    implementation "com.google.firebase:firebase-ml-vision:15.0.0"
+    implementation "com.squareup.okio:okio:$okIOVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
+    implementation "com.github.simonpercic:oklog3:2.3.0"
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

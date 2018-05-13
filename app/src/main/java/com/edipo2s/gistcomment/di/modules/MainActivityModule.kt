@@ -1,6 +1,7 @@
-package com.edipo2s.gistcomment.di
+package com.edipo2s.gistcomment.di.modules
 
 import android.content.Context
+import com.edipo2s.gistcomment.di.ActivityScope
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector

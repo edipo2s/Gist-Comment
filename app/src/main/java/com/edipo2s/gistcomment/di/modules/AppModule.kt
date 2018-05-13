@@ -1,4 +1,4 @@
-package com.edipo2s.gistcomment.di
+package com.edipo2s.gistcomment.di.modules
 
 import android.app.Application
 import android.content.Context

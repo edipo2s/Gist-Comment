@@ -1,4 +1,4 @@
-package com.edipo2s.gistcomment
+package com.edipo2s.gistcomment.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
@@ -17,12 +16,10 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import javax.inject.Inject
 
-internal class MainActivity : AppCompatActivity() {
+internal class MainActivity : BaseActivity(R.layout.activity_main) {
 
     @Inject
     lateinit var cameraSource: CameraSource
@@ -31,9 +28,7 @@ internal class MainActivity : AppCompatActivity() {
     lateinit var barcodeDetector: BarcodeDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         configView()
         if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Toast.makeText(this, R.string.no_camera, Toast.LENGTH_LONG).show()

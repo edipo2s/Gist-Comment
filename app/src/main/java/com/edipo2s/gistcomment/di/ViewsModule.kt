@@ -1,6 +1,7 @@
 package com.edipo2s.gistcomment.di
 
-import com.edipo2s.gistcomment.MainActivity
+import com.edipo2s.gistcomment.di.modules.MainActivityModule
+import com.edipo2s.gistcomment.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
