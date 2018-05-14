@@ -46,7 +46,7 @@ internal class MainActivity : BaseActivity(R.layout.activity_main) {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() > 0) {
                     val qrCodeText = barcodes.valueAt(0).displayValue
-                    cameraSource.stop()
+                    Log.i("QRCODE", qrCodeText)
                     showGist(qrCodeText)
                 }
             }
